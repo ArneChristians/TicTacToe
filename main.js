@@ -1,34 +1,20 @@
 function Gameboard() {
-    const rows = 3;
-    const columns = 3;
-    const board = [];
-
-    for(let i = 0; i < rows; i++) {
-        board[i] = [];
-        for(let j = 0; j < columns; j++) {
-            board[i].push(Cell());
-        }
-    }
+    const board = ["", "", "", "", "", "", "", "", ""];
 
     const getBoard = () => board;
+    const getCell = (num) => board[num];
 
-    return {getBoard}
-}
-
-function Cell() {
-    let state = "";
-
-    const addMarker = (player) => {
-        state = this.marker;
+    const placeMarker = (num, player) => {
+        board[num] = player.marker;
     }
 
-    const getState = () => state;
-
     return {
-        addMarker,
-        getState
-    };
+        getBoard,
+        getCell,
+        placeMarker
+    }
 }
+
 
 function GameController (playerOneName, playerTwoName) {
     const board = Gameboard();
@@ -55,13 +41,52 @@ function GameController (playerOneName, playerTwoName) {
         console.log(`It's ${getActivePlayer().marker}'s turn`)
     }
 
+    const winConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [6, 4, 2]
+    ]
+
     const checkWinner = () => {
-        
+        let roundWon = false;
+
+        for(let i = 0; i <= 7; i++) {
+            const winningCondition = winConditions[i];
+            let a = board.getCell(winningCondition[0]);
+            let b = board.getCell(winningCondition[1]);
+            let c = board.getCell(winningCondition[2]);
+
+            console.log(a, b, c);
+        }
     }
+
+    const placeMarker = (num) => {
+        const cell = board.getCell(num);
+        if(cell === "") {
+            board.placeMarker(num, getActivePlayer())
+        }
+        console.log(board.getCell(num));
+    };
+    
 
 
     const playRound = () => {
-        //Logic to play a round
+        //while() -> Solange es keinen Winner gibt
+            printNewRound();
+            placeMarker(1);
+            switchPlayerTurn();
+            console.log(board.getBoard());
+    }
+
+    return {
+        playRound,
+        checkWinner,
+        placeMarker
     }
 }
 
