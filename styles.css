@@ -21,6 +21,7 @@ body {
   /* 5. Improve text rendering */
   -webkit-font-smoothing: antialiased;
   font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Playwrite NZ Basic", cursive;
 }
 
 
@@ -56,3 +57,89 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Manual styling after CSS-Reset */ 
+
+:root {
+    --background-color: #F9DFDF;
+    --color: #F5AFAF;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+
+    background-color: var(--background-color);
+    color: var(--color);
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    background-color: #FCF8F8;
+}
+
+.gameboard {
+    grid-column: 2 / 3;
+    justify-self: center;
+    margin-top: 5rem;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+
+    height: 500px;
+    width: 500px;
+
+    
+    border-radius: 10px;
+    gap: 3px;
+}
+
+.cell { 
+    background-color: white;
+    font-size: 4rem;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid black;
+    border-radius: 5px;
+    
+    transition: all 0.4s;
+    cursor: pointer;
+}
+
+.cell:hover {
+    transform: scale(1.05);
+}
+
+.controlContainer {
+    grid-column: 3 / 4;
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: 8px;
+}
+
+.controlContainer button {
+    width: 75%;
+    align-self: center;
+}
+
+.infoContainer {
+    grid-column: 2 / 3;
+    margin-top: 3rem;
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--color);
+}
