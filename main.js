@@ -62,7 +62,14 @@ function GameController (playerOneName, playerTwoName) {
             let c = board.getCell(winningCondition[2]);
 
             console.log(a, b, c);
+            
+            if(a != "" && b != "" && c !="") {
+                if(a === b || b === c) {
+                    roundWon = true;
+                }
+            }
         }
+        return roundWon;
     }
 
     const placeMarker = (num) => {
@@ -79,6 +86,9 @@ function GameController (playerOneName, playerTwoName) {
         //while() -> Solange es keinen Winner gibt
             printNewRound();
             placeMarker(1);
+            if(checkWinner) {
+                //Announce Winner
+            }
             switchPlayerTurn();
             console.log(board.getBoard());
     }
