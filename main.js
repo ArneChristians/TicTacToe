@@ -8,10 +8,17 @@ function Gameboard() {
         board[num] = player.marker;
     }
 
+    const reset = () => {
+        for(let i = 0; i < board.length; i++) {
+            board[i] = "";
+        }
+    }
+
     return {
         getBoard,
         getCell,
-        placeMarker
+        placeMarker,
+        reset
     }
 }
 
@@ -62,7 +69,7 @@ function GameController (playerOneName, playerTwoName) {
             let c = board.getCell(winningCondition[2]);
 
             console.log(a, b, c);
-            
+
             if(a != "" && b != "" && c !="") {
                 if(a === b || b === c) {
                     roundWon = true;
@@ -76,20 +83,21 @@ function GameController (playerOneName, playerTwoName) {
         const cell = board.getCell(num);
         if(cell === "") {
             board.placeMarker(num, getActivePlayer())
+            console.log(board.getCell(num));
+        } else {
+            console.log("Cell is already compromised!")
         }
-        console.log(board.getCell(num));
     };
     
-
-
     const playRound = () => {
         //while() -> Solange es keinen Winner gibt
             printNewRound();
-            placeMarker(1);
-            if(checkWinner) {
-                //Announce Winner
+            placeMarker(0);
+            if(checkWinner === true) {
+                console.log(`${activePlayer.marker} has won the game!`)
             }
             switchPlayerTurn();
+            placeMarker(1)
             console.log(board.getBoard());
     }
 
