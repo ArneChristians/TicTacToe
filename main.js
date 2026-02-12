@@ -37,6 +37,18 @@ function GameController (playerOneName, playerTwoName) {
         }
     ];
 
+    const gameboard = document.querySelector(".gameboard");
+
+    const renderBoard = () => {
+        for(let i = 0; i < board.getBoard().length; i++) {
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.textContent = board.getBoard()[i];
+            //Append Cell to main
+            gameboard.appendChild(cell);
+        }
+    }
+
     let activePlayer = players[0];
 
     const switchPlayerTurn = () => {
@@ -90,6 +102,8 @@ function GameController (playerOneName, playerTwoName) {
     };
     
     const playRound = () => {
+
+          
         //while() -> Solange es keinen Winner gibt
             printNewRound();
             placeMarker(0);
@@ -99,12 +113,15 @@ function GameController (playerOneName, playerTwoName) {
             switchPlayerTurn();
             placeMarker(1)
             console.log(board.getBoard());
+            renderBoard();
+        
     }
 
     return {
         playRound,
         checkWinner,
-        placeMarker
+        placeMarker,
+        renderBoard
     }
 }
 
