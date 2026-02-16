@@ -40,10 +40,13 @@ function GameController (playerOneName, playerTwoName) {
     const gameboard = document.querySelector(".gameboard");
 
     const renderBoard = () => {
+        gameboard.innerHTML = "";
+        const cells = board.getBoard();
         for(let i = 0; i < board.getBoard().length; i++) {
             let cell = document.createElement("div");
             cell.classList.add("cell");
-            cell.textContent = board.getBoard()[i];
+            cell.dataset.index = i
+            cell.textContent = cells[i];
             //Append Cell to main
             gameboard.appendChild(cell);
         }
@@ -51,13 +54,28 @@ function GameController (playerOneName, playerTwoName) {
 
     let activePlayer = players[0];
 
+    const info = document.querySelector(".infoContainer");
+
+    const clearBoard = () => {
+        const reset = document.querySelector(".reset")
+
+        reset.addEventListener("click", () => {
+            board.reset();
+            renderBoard();
+            activePlayer = players[0];
+            info.innerHTML = "";
+            info.textContent = `It's ${activePlayer.marker}'s turn!`;
+        })
+    }
+
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
     const getActivePlayer = () => activePlayer;
 
     const printNewRound = () => {
-        console.log(`It's ${getActivePlayer().marker}'s turn`)
+        info.innerHTML = "";
+        info.textContent = `It's ${getActivePlayer().marker}'s turn`;
     }
 
     const winConditions = [
@@ -82,46 +100,60 @@ function GameController (playerOneName, playerTwoName) {
 
             console.log(a, b, c);
 
-            if(a != "" && b != "" && c !="") {
-                if(a === b || b === c) {
+            if(a !== "" && b !== "" && c !=="") {
+                if(a === b && b === c) {
                     roundWon = true;
+                    break;
                 }
             }
         }
         return roundWon;
     }
 
-    const placeMarker = (num) => {
-        const cell = board.getCell(num);
-        if(cell === "") {
-            board.placeMarker(num, getActivePlayer())
-            console.log(board.getCell(num));
-        } else {
-            console.log("Cell is already compromised!")
-        }
-    };
-    
-    const playRound = () => {
+    const placeMarker = () => {
+        gameboard.addEventListener("click", function(e) {
+            const cell = e.target.closest(".cell");
+            if (!cell) return;
 
-          
-        //while() -> Solange es keinen Winner gibt
-            printNewRound();
-            placeMarker(0);
-            if(checkWinner === true) {
-                console.log(`${activePlayer.marker} has won the game!`)
+            const index = Number(cell.dataset.index);
+            if (board.getCell(index) !== "") {
+                console.log("Cell is already compromised!");
+            return;
             }
+
+            if(!checkWinner()){
+                board.placeMarker(index, getActivePlayer());
+                renderBoard();
+            }
+
+            if (checkWinner()) {
+                info.innerHTML = "";
+                info.textContent =`${getActivePlayer().marker} has won the game!`;
+
+            } else {
             switchPlayerTurn();
-            placeMarker(1)
-            console.log(board.getBoard());
-            renderBoard();
-        
+            printNewRound();
+            }
+        });
+    };
+
+    
+
+    const playRound = () => {
+        renderBoard();
+        clearBoard();
+        printNewRound();
+        placeMarker();
     }
 
     return {
         playRound,
         checkWinner,
         placeMarker,
-        renderBoard
+        renderBoard,
+        board,
+        clearBoard
     }
 }
 
+GameController().playRound();
